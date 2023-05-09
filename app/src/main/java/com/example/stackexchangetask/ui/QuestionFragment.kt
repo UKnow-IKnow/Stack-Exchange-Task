@@ -24,6 +24,7 @@ class QuestionFragment : Fragment() {
     private val viewModel: QuestionViewModel by viewModels()
     private var job: Job? = null
     private lateinit var questionsAdapter: QuestionAdapter
+    private lateinit var searchedQuestionsAdapter: QuestionAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +54,23 @@ class QuestionFragment : Fragment() {
                 is Resource.Loading -> {
                     Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+
+        viewModel.searchedQuestions.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    progress_bar.isGone = true
+                    if (resource.data!!.items.isNotEmpty()) {
+                        searchedQuestionsAdapter.submitList(resource.data.items)
+                        questions_searched_rv.isGone = false
+                        null_search.isGone = true
+                    } else {
+                        null_search.isGone = false
+                        questions_searched_rv.isGone = true
+                    }
+                }
+                else -> {}
             }
         }
     }

@@ -20,6 +20,10 @@ class QuestionViewModel @Inject internal constructor(private val repository: Que
     private val _questions = MutableLiveData<Resource<QuestionResponse>>()
     val questions: LiveData<Resource<QuestionResponse>> get() = _questions
 
+    private val _searchedQuestions: MutableLiveData<Resource<QuestionResponse>> =
+        MutableLiveData()
+    val searchedQuestions: LiveData<Resource<QuestionResponse>> = _searchedQuestions
+
     init {
         getQuestions()
     }
