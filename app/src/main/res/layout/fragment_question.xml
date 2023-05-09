@@ -8,7 +8,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context=".QuestionFragment">
+    tools:context=".ui.QuestionFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/searchToolBar"
