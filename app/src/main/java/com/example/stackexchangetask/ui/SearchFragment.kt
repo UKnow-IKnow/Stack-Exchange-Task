@@ -54,10 +54,6 @@ class SearchFragment : BottomSheetDialogFragment() {
 
         setUpRecyclerView()
 
-        binding.closeTags.setOnClickListener {
-            dismiss()
-            tagAdapter.submitList(null)
-        }
 
         binding.useTagsButton.setOnClickListener {
             binding.tagsInputText.editText?.text?.toString()?.trim()?.let { tags ->
