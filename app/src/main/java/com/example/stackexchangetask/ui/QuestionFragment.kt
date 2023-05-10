@@ -140,6 +140,14 @@ class QuestionFragment : Fragment() {
         }, requireContext())
         binding?.questionsRv?.adapter = questionsAdapter
 
+        binding?.questionsSearchedRv?.setHasFixedSize(true)
+        searchedQuestionsAdapter = QuestionAdapter(object : QuestionAdapter.OnClickListener {
+            override fun openQuestion(questionItem: Question) {
+                openQuestion(questionItem, requireContext())
+            }
+        }, requireContext())
+        binding?.questionsSearchedRv?.adapter = searchedQuestionsAdapter
+
     }
 
     private fun hideKeyboard() {
