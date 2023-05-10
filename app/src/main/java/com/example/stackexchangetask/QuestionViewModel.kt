@@ -46,4 +46,20 @@ class QuestionViewModel @Inject internal constructor(private val repository: Que
             }
         }
     }
+
+    fun searchQuestions(query: String) = viewModelScope.launch {
+        _searchedQuestions.postValue(Resource.Loading())
+        val response = repository.searchQuestions(query)
+        _searchedQuestions.postValue(safeHandleSearchResponse(response))
+    }
+
+    private suspend fun safeHandleSearchResponse(response: Response<QuestionResponse>): Resource<QuestionResponse>? {
+        return withContext(Dispatchers.IO) {
+            try {
+                Resource.Success(data = response.body()!!)
+            } catch (e: Exception) {
+                Resource.Error(e.message.toString())
+            }
+        }
+    }
 }
