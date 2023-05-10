@@ -13,20 +13,24 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.stackexchangetask.QuestionViewModel
 import com.example.stackexchangetask.R
 import com.example.stackexchangetask.adapters.QuestionAdapter
+import com.example.stackexchangetask.databinding.FragmentQuestionBinding
+import com.example.stackexchangetask.databinding.FragmentSearchBinding
 import com.example.stackexchangetask.model.Question
 import com.example.stackexchangetask.utils.Resource
 import com.example.stackexchangetask.utils.openQuestion
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_question.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class QuestionFragment : Fragment() {
 
+    private var _binding: FragmentQuestionBinding? = null
+    private val binding get() = _binding
     private val viewModel: QuestionViewModel by viewModels()
     private var job: Job? = null
     private lateinit var questionsAdapter: QuestionAdapter
@@ -37,18 +41,30 @@ class QuestionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_question, container, false)
+        _binding = FragmentQuestionBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val binding = FragmentQuestionBinding.bind(view)
+        _binding = binding
+
         setUpRecyclerView()
+        binding.clearQuery.setOnClickListener {
+            binding.searchET.text.clear()
+            hideKeyboard()
+        }
+
+        binding.filterIcon.setOnClickListener {
+            findNavController().navigate(R.id.action_questionFragment_to_searchFragment)
+        }
 
         viewModel.questions.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    questions_rv.isGone = false
+                    binding.questionsRv.isGone = false
                     questionsAdapter.submitList(resource.data!!.items)
                 }
 
@@ -66,52 +82,52 @@ class QuestionFragment : Fragment() {
         viewModel.searchedQuestions.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    progress_bar.isGone = true
+                    binding.progressBar.isGone = true
                     if (resource.data!!.items.isNotEmpty()) {
                         searchedQuestionsAdapter.submitList(resource.data.items)
-                        questions_searched_rv.isGone = false
-                        null_search.isGone = true
+                        binding.questionsSearchedRv.isGone = false
+                        binding.nullSearch.isGone = true
                     } else {
-                        null_search.isGone = false
-                        questions_searched_rv.isGone = true
+                        binding.nullSearch.isGone = false
+                        binding.questionsSearchedRv.isGone = true
                     }
                 }
                 else -> {}
             }
         }
 
-        searchET?.doOnTextChanged { text, _, _, _ ->
+        binding.searchET?.doOnTextChanged { text, _, _, _ ->
             text?.let {
                 if (it.trim().isNotBlank() && it.trim().isNotEmpty()) {
-                    clearQuery.isGone = false
-                    searchIcon.isVisible = false
-                    questions_rv.isGone = true
+                    binding.clearQuery.isGone = false
+                    binding.searchIcon.isVisible = false
+                    binding.questionsRv.isGone = true
 
-                    search_key_text.text = "Searched questions"
-                    progress_bar.isGone = false
-                    null_search.isGone = true
-                    error_network.isGone = true
-                    questions_searched_rv.isGone = true
+                    binding.searchKeyText.text = "Searched questions"
+                    binding.progressBar.isGone = false
+                    binding.nullSearch.isGone = true
+                    binding.errorNetwork.isGone = true
+                    binding.questionsSearchedRv.isGone = true
                     searchQuestion(it.trim().toString())
                 } else {
-                    clearQuery.isGone = true
-                    searchIcon.isVisible = true
-                    search_key_text.text = "Questions"
-                    questions_rv.isGone = false
-                    questions_searched_rv.isGone = true
+                    binding.clearQuery.isGone = true
+                    binding.searchIcon.isVisible = true
+                    binding.searchKeyText.text = "Questions"
+                    binding.questionsRv.isGone = false
+                    binding.questionsSearchedRv.isGone = true
                 }
             }
         }
     }
 
     private fun setUpRecyclerView() {
-        questions_rv.setHasFixedSize(true)
+        binding?.questionsRv?.setHasFixedSize(true)
         questionsAdapter = QuestionAdapter(object : QuestionAdapter.OnClickListener {
             override fun openQuestion(questionItem: Question) {
                 openQuestion(questionItem, requireContext())
             }
         }, requireContext())
-        questions_rv.adapter = questionsAdapter
+        binding?.questionsRv?.adapter = questionsAdapter
 
     }
 

@@ -1,8 +1,9 @@
 package com.example.stackexchangetask.repository
 
 import com.example.stackexchangetask.api.StackExchangeApi
+import javax.inject.Inject
 
-class QuestionRepository (private val stackExchangeApi: StackExchangeApi){
+class QuestionRepository  @Inject constructor(private val stackExchangeApi: StackExchangeApi){
 
     suspend fun getQuestions() = stackExchangeApi.getQuestions()
 

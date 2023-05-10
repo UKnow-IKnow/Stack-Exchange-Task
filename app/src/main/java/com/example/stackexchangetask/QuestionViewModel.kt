@@ -24,6 +24,10 @@ class QuestionViewModel @Inject internal constructor(private val repository: Que
         MutableLiveData()
     val searchedQuestions: LiveData<Resource<QuestionResponse>> = _searchedQuestions
 
+    private val _taggedQuestions: MutableLiveData<Resource<QuestionResponse>> =
+        MutableLiveData()
+    val taggedQuestions: LiveData<Resource<QuestionResponse>> = _taggedQuestions
+
     init {
         getQuestions()
     }
@@ -54,6 +58,22 @@ class QuestionViewModel @Inject internal constructor(private val repository: Que
     }
 
     private suspend fun safeHandleSearchResponse(response: Response<QuestionResponse>): Resource<QuestionResponse>? {
+        return withContext(Dispatchers.IO) {
+            try {
+                Resource.Success(data = response.body()!!)
+            } catch (e: Exception) {
+                Resource.Error(e.message.toString())
+            }
+        }
+    }
+
+    fun searchWithTag(tags: String) = viewModelScope.launch {
+        _taggedQuestions.postValue(Resource.Loading())
+        val response = repository.searchWithTag(tags)
+        _taggedQuestions.postValue(safeHandleTaggedResponse(response))
+    }
+
+    private suspend fun safeHandleTaggedResponse(response: Response<QuestionResponse>): Resource<QuestionResponse>? {
         return withContext(Dispatchers.IO) {
             try {
                 Resource.Success(data = response.body()!!)

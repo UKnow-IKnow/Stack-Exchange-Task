@@ -22,7 +22,10 @@ class QuestionAdapter(private val clickListener: OnClickListener, private val co
                 Glide.with(context).load(questionItem.owner.profile_image).into(questionItemAuthor)
                 questionItemAuthorText.text = questionItem.owner.display_name
                 questionItemTimestampText.getTime(questionItem.last_edit_date.toLong())
+                val tagAdapter = TagAdapter()
                 questionItemTagsRv.setHasFixedSize(true)
+                questionItemTagsRv.adapter = tagAdapter
+                tagAdapter.submitList(questionItem.tags)
                 root.setOnClickListener {
                     clickListener.openQuestion(questionItem)
                 }
