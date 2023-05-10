@@ -75,6 +75,8 @@ class QuestionFragment : Fragment() {
         viewModel.questions.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
+                    binding.shimmerEffect.isGone = true
+                    binding.shimmerEffect.stopShimmer()
                     binding.questionsRv.isGone = false
                     questionsAdapter.submitList(resource.data!!.items)
                 }
@@ -85,7 +87,8 @@ class QuestionFragment : Fragment() {
                 }
 
                 is Resource.Loading -> {
-                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                    binding.shimmerEffect.isGone = false
+                    binding.shimmerEffect.stopShimmer()
                 }
             }
         }
