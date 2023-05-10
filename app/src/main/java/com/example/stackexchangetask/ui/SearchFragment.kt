@@ -42,12 +42,12 @@ class SearchFragment : BottomSheetDialogFragment() {
         val binding = FragmentSearchBinding.bind(view)
         _binding = binding
 
-        NetworkError(requireContext()).observe(viewLifecycleOwner){
-            if (!it){
+        NetworkError(requireContext()).observe(viewLifecycleOwner) {
+            if (!it) {
                 //No Internet connection
                 findNavController().navigate(R.id.action_searchFragment_to_noInternet)
 
-            }else{
+            } else {
 
             }
         }

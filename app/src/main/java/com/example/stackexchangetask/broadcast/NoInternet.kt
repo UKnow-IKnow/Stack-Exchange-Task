@@ -11,6 +11,7 @@ class NoInternet : AppCompatActivity() {
     companion object {
         val TAG = NoInternet::class.simpleName
     }
+
     var isInternet = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

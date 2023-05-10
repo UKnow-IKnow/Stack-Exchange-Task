@@ -32,9 +32,7 @@ class TagAdapter : ListAdapter<String, TagAdapter.ItemViewHolder>(DiffUtilCallba
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
             TagItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+                LayoutInflater.from(parent.context), parent, false
             )
         )
     }

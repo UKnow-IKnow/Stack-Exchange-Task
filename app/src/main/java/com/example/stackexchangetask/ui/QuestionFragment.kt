@@ -52,12 +52,12 @@ class QuestionFragment : Fragment() {
         val binding = FragmentQuestionBinding.bind(view)
         _binding = binding
 
-        NetworkError(requireContext()).observe(viewLifecycleOwner){
-            if (!it){
+        NetworkError(requireContext()).observe(viewLifecycleOwner) {
+            if (!it) {
                 //No Internet connection
                 findNavController().navigate(R.id.action_questionFragment_to_noInternet)
 
-            }else{
+            } else {
 
             }
         }

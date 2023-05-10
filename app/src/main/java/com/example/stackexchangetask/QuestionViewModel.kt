@@ -15,7 +15,8 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionViewModel @Inject internal constructor(private val repository: QuestionRepository) : ViewModel() {
+class QuestionViewModel @Inject internal constructor(private val repository: QuestionRepository) :
+    ViewModel() {
 
     private val _questions = MutableLiveData<Resource<QuestionResponse>>()
     val questions: LiveData<Resource<QuestionResponse>> get() = _questions
