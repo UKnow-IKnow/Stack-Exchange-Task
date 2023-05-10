@@ -13,10 +13,22 @@
         <action
             android:id="@+id/action_questionFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_questionFragment_to_noInternet"
+            app:destination="@id/noInternet" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.stackexchangetask.ui.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_noInternet"
+            app:destination="@id/noInternet" />
+    </fragment>
+    <activity
+        android:id="@+id/noInternet"
+        android:name="com.example.stackexchangetask.broadcast.NoInternet"
+        android:label="activity_no_internet"
+        tools:layout="@layout/activity_no_internet" />
 </navigation>

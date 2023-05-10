@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.stackexchangetask.QuestionViewModel
 import com.example.stackexchangetask.R
 import com.example.stackexchangetask.adapters.QuestionAdapter
+import com.example.stackexchangetask.broadcast.NetworkError
 import com.example.stackexchangetask.databinding.FragmentQuestionBinding
 import com.example.stackexchangetask.databinding.FragmentSearchBinding
 import com.example.stackexchangetask.model.Question
@@ -50,6 +51,16 @@ class QuestionFragment : Fragment() {
 
         val binding = FragmentQuestionBinding.bind(view)
         _binding = binding
+
+        NetworkError(requireContext()).observe(viewLifecycleOwner){
+            if (!it){
+                //No Internet connection
+                findNavController().navigate(R.id.action_questionFragment_to_noInternet)
+
+            }else{
+
+            }
+        }
 
         setUpRecyclerView()
         binding.clearQuery.setOnClickListener {

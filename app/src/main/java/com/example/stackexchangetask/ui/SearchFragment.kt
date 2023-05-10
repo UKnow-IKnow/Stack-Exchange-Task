@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.stackexchangetask.QuestionViewModel
 import com.example.stackexchangetask.R
 import com.example.stackexchangetask.adapters.QuestionAdapter
+import com.example.stackexchangetask.broadcast.NetworkError
 import com.example.stackexchangetask.databinding.FragmentSearchBinding
 import com.example.stackexchangetask.model.Question
 import com.example.stackexchangetask.utils.Resource
@@ -39,6 +41,16 @@ class SearchFragment : BottomSheetDialogFragment() {
 
         val binding = FragmentSearchBinding.bind(view)
         _binding = binding
+
+        NetworkError(requireContext()).observe(viewLifecycleOwner){
+            if (!it){
+                //No Internet connection
+                findNavController().navigate(R.id.action_searchFragment_to_noInternet)
+
+            }else{
+
+            }
+        }
 
         setUpRecyclerView()
 
